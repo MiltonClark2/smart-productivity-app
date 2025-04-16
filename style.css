@@ -1,0 +1,277 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    padding: 1rem;
+}
+
+/* Layout with Flexbox */
+.container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+nav {
+    flex: 1;
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+main {
+    flex: 3;
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Styling Components */
+header {
+    background-color: #4f46e5;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav li {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background: #e0e7ff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+nav li:hover {
+    background: #c7d2fe;
+}
+
+.todo input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.task.text{
+    flex-grow: 1;
+    padding: 0 0.5rem;
+}
+
+.task input,
+.task .task-text,
+.task .delete-btn {
+    pointer-events: auto;
+}
+
+.drag-handle {
+    cursor: grab;
+    font-size: 1.25rem;
+    color: #bbb;
+    transition: color 0.2s ease;
+    user-select: none;
+}
+
+.drag-handle:hover {
+    color: #4f46e5;
+}
+
+.sortable-chosen {
+    background-color: #eef2ff !important;
+    box-shadow: 0 0 10px rgba(79 70 229 0.3);
+    transform: scale(1.02);
+    transition: transform 0.2s ease, box-shadow o.2s ease;
+}
+
+.sortable-ghost {
+    opacity: 0.5;
+    background-color: #c7d2fe !important;
+}
+
+
+.task.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.task-checkbox {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.task-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.task-text {
+    font-size: 1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#category-select {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.category-tag {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #555;
+    background-color: #eef2ff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.task-text.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+    color: gray;
+}
+
+.task:hover {
+    background: #f0f4ff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* Soft shadow */
+}
+
+.edit-input {
+    flex: 1;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    background: #f9fafb;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.urgent-important {
+    background-color: #fee2e2; /* light red */
+}
+
+.urgent-not-important {
+    background-color: #fef3c7; /* soft yellow */
+}
+
+.not-urgent-important {
+    background-color: #d1fae5; /* mint green */
+}
+
+.not-urgent-not-important {
+    background-color: #e0e7ff; /* calm blue */
+}
+
+/* Dragging styles */
+.task.dragging {
+    opacity: 0.5;
+    transform: rotate(2deg) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.task.placeholder {
+    background: #dbeafe;
+    border: 2px dashed #60a5fa;
+    min-height: 50px;
+    opacity: 0.8;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+/* Bounce animation for dropped item */
+.task.dropped {
+    animation: bounce 0.4s ease;
+}
+
+@keyframes bounce {
+    0% {transform: scale(1);}
+    30% {transform: scale(1.05);}
+    60% {transform: scale(0.97);}
+    100% {transform: scale(1);}
+}
+
+
+.completed {
+    text-decoration: line-through;
+    color: gray;
+    opacity: 0.6;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.delete-btn:hover {
+    transform: scale(1.2);
+}
+
+#filter-select {
+    margin: 10px 0;
+    padding: 5px;
+    font-size: 1rem;
+}
+
+/* Makes App Responsive */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    nav, main {
+        width: 100%;
+    }
+}

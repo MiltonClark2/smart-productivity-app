@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Planner</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <h1>AI Career + Life Planner</h1>
+        <p id="date"></p>
+    </header>
+
+    <div class="container">
+        <nav>
+            <ul>
+                <li>Dashboard</li>
+                <li>Tasks</li>
+                <li>Progress</li>
+                <li>Career Tools</li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="greeting">
+                <h2>Welcome, Milton 👋</h2>
+            </section>
+
+            <section class="todo">
+                <input type="text" placeholder="Add a new task..." />
+
+            <!--Category Selector-->    
+            <select id="category-select">
+                <option value="urgent-important">Urgent & Important</option>
+                <option value="urgent-not-important">Urgent & Not Important</option>
+                <option value="not-urgent-important">Not Urgent & Important</option>
+                <option value="not-urgent-not-important">Not Urgent & Not Important</option>
+            </select>
+
+                <!--Filter Dropdown --> 
+                <select id="filter-select">
+                    <option value="all">All</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </section>
+
+            <!--Task List Container-->
+            <ul class="task-list" id="task-list"></ul>
+        </main>
+    </div>
+
+    <footer>
+        <p>"Discipline equals freedom." - Jocko Willink</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
