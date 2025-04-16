@@ -17,6 +17,22 @@ const taskList = document.getElementById("task-list");
 const filterSelect = document.getElementById("filter-select"); // Optional filter dropdown
 const categorySelect = document.getElementById("category-select");
 
+function updateStats(){
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const today = new Date().toISOString().split('T')[0];
+
+    const completedToday = tasks.filter(task => 
+        task.completed && task.completedDate === today
+    ).length;
+
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(task => task.completed).length;
+
+    document.getElementById('completed-today').textContent = completedToday;
+    document.getElementById('completion-rate').textContent = totalTasks > 0
+    ? `${Math.round((completedTasks / totalTasks) * 100)}%` : '0%';
+}
+
 input.addEventListener("keypress", function (e){
     if(e.key === "Enter" && input.value.trim() !== ""){
         // Add to tasks array
@@ -109,9 +125,18 @@ function renderTasks(filter = "all") {
         // Toggle task completion
         checkbox.addEventListener("change", () => {
             task.completed = checkbox.checked;
+
+            // Save today's date when task is marked complete
+            if(task.completed){
+                task.completedDate = new Date().toISOString().split('T')[0];
+            } else {
+                delete task.completedDate;
+            }
+
             // Saves and updates local storage
             localStorage.setItem("tasks", JSON.stringify(tasks));
             renderTasks(filterSelect.value);
+            updateStats(); // Tracks progress in real-time
 
             // Confetti when task is completed
             function celebrateBurst(){
@@ -258,5 +283,6 @@ if(filterSelect){
 
 // Initial Render
 renderTasks();
+updateStats(); // Keep dashboard in sync on initial load
 
 
