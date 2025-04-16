@@ -209,12 +209,37 @@ new Sortable(taskList, {
     ghostClass: "placeholder",    // placeholder for where item is dropping
     chosenClass: "dragging",      // the dragged item
     onEnd: function(evt){
-        const movedItem = tasks.splice(evt.oldIndex, 1)[0];
-        tasks.splice(evt.newIndex, 0, movedItem);
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        renderTasks(filterSelect.value);
+        const currentFilter = filterSelect.value;
 
-     // Bounce effect for dropped item
+        if(currentFilter === "completed") return; // No dragging allowed here
+
+        // Get the filtered list of tasks
+        let filteredTasks = tasks.filter(task => {
+            if(currentFilter === "active") return !task.completed;
+            return true; // 'all'
+        });
+        
+        // Remove and re-insert in filtered view
+        const movedItem = filteredTasks.splice(evt.oldIndex, 1)[0];
+        filteredTasks.splice(evt.newIndex, 0, movedItem);
+
+        //Rebuild the full tasks array based on new filtered order
+        let newTasks = [];
+        let filteredIndex = 0;
+        for(let task of tasks){
+            if((currentFilter === "active" && !task.completed) || currentFilter === "all"){
+                newTasks.push(filteredTasks[filteredIndex]);
+                filteredIndex++;
+            } else {
+                newTasks.push(task);
+            }
+        }
+
+        tasks = newTasks;
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        renderTasks(currentFilter);
+
+     // Animation for dropped item
      const listItems = taskList.querySelectorAll(".task");
      const droppedEl = listItems[evt.newIndex];
      if(droppedEl){
@@ -223,7 +248,6 @@ new Sortable(taskList, {
      }   
     }
 });
-
 
 // Filter Logic
 if(filterSelect){

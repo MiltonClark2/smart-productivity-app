@@ -42,7 +42,7 @@ This app is part of my **AI Career & Life Planner** portfolio project, showcasin
 ## 🛠️ Installation
 
 ```bash
-git clone https://github.com/your-username/smart-productivity-app.git
+git clone https://github.com/MiltonClark2/smart-productivity-app.git
 cd smart-productivity-app
 open index.html
 
