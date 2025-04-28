@@ -33,15 +33,20 @@ function updateStats(){
     ? `${Math.round((completedTasks / totalTasks) * 100)}%` : '0%';
 }
 
+// Helper function to create task and for future scalability
+function createTask(text, category){
+    return {
+        text: text.trim(),
+        completed: false,
+        category: category,
+        createdAt: new Date().toISOString() // Captures exact date and time task is created.
+    };
+}
+
 input.addEventListener("keypress", function (e){
     if(e.key === "Enter" && input.value.trim() !== ""){
         // Add to tasks array
-        tasks.push({
-            text: input.value.trim(),
-            completed: false,
-            category: categorySelect.value,
-            createdAt: new Date().toISOString()  // Captures exact date and time task is created.
-        });
+        tasks.push(createTask(input.value, categorySelect.value));
 
         // Save and re-render
         localStorage.setItem("tasks", JSON.stringify(tasks));
