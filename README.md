@@ -73,9 +73,13 @@ Then open index.html in your browser, or use Live Server in VS Code.
 ---
 
 🤝 Connect With Me
-LinkedIn
+LinkedIn 
+https://linkedin.com/in/milton-clark-93674b114
 
 Medium
+https://medium.com/@miltonclark247
 
 GitHub
+https://github.com/MiltonClark2
+
 
