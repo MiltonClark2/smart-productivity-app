@@ -130,8 +130,10 @@ function renderTasks(filter = "all") {
             // Save today's date when task is marked complete
             if(task.completed){
                 task.completedDate = new Date().toISOString().split('T')[0];
+                task.completedAt = new Date().toISOString(); // Saves the full timestamp
             } else {
                 delete task.completedDate;
+                delete task.completedAt;
             }
 
             // Saves and updates local storage
