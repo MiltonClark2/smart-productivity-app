@@ -39,7 +39,8 @@ input.addEventListener("keypress", function (e){
         tasks.push({
             text: input.value.trim(),
             completed: false,
-            category: categorySelect.value
+            category: categorySelect.value,
+            createdAt: new Date().toISOString()  // Captures exact date and time task is created.
         });
 
         // Save and re-render
