@@ -21,6 +21,10 @@ function updateStats(){
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const today = new Date().toISOString().split('T')[0];
 
+    const createdToday = tasks.filter(task => 
+        task.createdAt && task.createdAt.split('T')[0] === today
+    ).length;
+
     const completedToday = tasks.filter(task => 
         task.completed && task.completedDate === today
     ).length;
@@ -28,6 +32,8 @@ function updateStats(){
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(task => task.completed).length;
 
+
+    document.getElementById('created-today').textContent = createdToday;
     document.getElementById('completed-today').textContent = completedToday;
     document.getElementById('completion-rate').textContent = totalTasks > 0
     ? `${Math.round((completedTasks / totalTasks) * 100)}%` : '0%';
