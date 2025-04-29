@@ -64,6 +64,15 @@ nav li:hover {
     background: #c7d2fe;
 }
 
+.stats-dashboard {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+}
+
 .stats {
     margin-top: 2rem;
     background: #f0f4ff;
@@ -83,6 +92,17 @@ nav li:hover {
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease;
+}
+
+.stat-card h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
 }
 
 .stat-card:hover {
