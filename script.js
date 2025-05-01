@@ -261,14 +261,24 @@ function renderTasks(filter = "all") {
                 renderTasks(filterSelect.value);
             };
 
-            inputEdit.addEventListener("blur", saveEdit);
-            categoryEdit.addEventListener("blur", saveEdit);
+            // Save after short delay, ensuring blur isn't caused by switching between fields
+            const handleBlur = () => {
+                setTimeout(() => {
+                    const active = document.activeElement;
+                    if(active !== inputEdit && active !== categoryEdit){
+                        saveEdit();
+                    }
+                }, 100);
+            };
+
+            inputEdit.addEventListener("blur", handleBlur);
+            categoryEdit.addEventListener("blur", handleBlur);
 
             inputEdit.addEventListener("keydown", e => {
                 if(e.key === "Enter") inputEdit.blur();
             });
         });
-        
+
           // Delete button
           const deleteBtn = document.createElement("button");
           deleteBtn.textContent = "🗑️";
