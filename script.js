@@ -17,6 +17,21 @@ const taskList = document.getElementById("task-list");
 const filterSelect = document.getElementById("filter-select"); // Optional filter dropdown
 const categorySelect = document.getElementById("category-select");
 
+// Animate a single value
+function animateValue(element, start, end, duration){
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if(!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const value = Math.floor(progress * (end - start) + start);
+        element.textContent = element.id === 'completion-rate' ? `${value}%` : value;
+        if(progress < 1){
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
 function updateStats(){
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const today = new Date().toISOString().split('T')[0];
@@ -32,11 +47,20 @@ function updateStats(){
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(task => task.completed).length;
 
+    // Animation logic
+    const createdTodayEl = document.getElementById('created-today');
+    const completedTodayEl = document.getElementById('completed-today');
+    const completionRateEl = document.getElementById('completion-rate');
 
+    animateValue(createdTodayEl, 0, createdToday, 500);
+    animateValue(completedTodayEl, 0, completedToday, 500);
+    animateValue(completionRateEl, 0, totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0, 500)
+
+/*
     document.getElementById('created-today').textContent = createdToday;
     document.getElementById('completed-today').textContent = completedToday;
     document.getElementById('completion-rate').textContent = totalTasks > 0
-    ? `${Math.round((completedTasks / totalTasks) * 100)}%` : '0%';
+    ? `${Math.round((completedTasks / totalTasks) * 100)}%` : '0%';   */
 }
 
 // Helper function to create task and for future scalability
@@ -133,26 +157,7 @@ function renderTasks(filter = "all") {
             taskItem.appendChild(dueEl);
         }
 */
-        
-        // Toggle task completion
-        checkbox.addEventListener("change", () => {
-            task.completed = checkbox.checked;
-
-            // Save today's date when task is marked complete
-            if(task.completed){
-                task.completedDate = new Date().toISOString().split('T')[0];
-                task.completedAt = new Date().toISOString(); // Saves the full timestamp
-            } else {
-                delete task.completedDate;
-                delete task.completedAt;
-            }
-
-            // Saves and updates local storage
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            renderTasks(filterSelect.value);
-            updateStats(); // Tracks progress in real-time
-
-            // Confetti when task is completed
+        // Confetti when task is completed
             function celebrateBurst(){
                 const defaults = {
                     origin: {y: 0.6}
@@ -187,6 +192,26 @@ function renderTasks(filter = "all") {
                     startVelocity: 45,
                 });
             }
+        
+        // Toggle task completion
+        checkbox.addEventListener("change", () => {
+            task.completed = checkbox.checked;
+
+            // Save today's date when task is marked complete
+            if(task.completed){
+                task.completedDate = new Date().toISOString().split('T')[0];
+                task.completedAt = new Date().toISOString(); // Saves the full timestamp
+            } else {
+                delete task.completedDate;
+                delete task.completedAt;
+            }
+
+            // Saves and updates local storage
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks(filterSelect.value);
+            updateStats(); // Tracks progress in real-time
+
+           // Logic for confetti at task complete
             if(task.completed){
                 celebrateBurst();
             }
@@ -194,26 +219,56 @@ function renderTasks(filter = "all") {
 
         // Double-click to edit
         taskText.addEventListener("dblclick", () => {
+            // Create text input
             const inputEdit = document.createElement("input");
             inputEdit.type = "text";
             inputEdit.value = task.text;
             inputEdit.classList.add("edit-input");
 
-            // Replace the span with input
-            taskItem.replaceChild(inputEdit, taskText);
+            // Create category dropdown
+            const categoryEdit = document.createElement("select");
+            categoryEdit.classList.add("edit-category");
+            const categories = [
+                {value: "urgent-important", label: "🔥 Urgent & Important"},
+                {value: "urgent-not-important", label: "⚡ Urgent, Not Important"},
+                {value: "not-urgent-important", label: "🌱 Not Urgent, Important"},
+                {value: "not-urgent-not-important", label: "🌈 Chill (Not Urgent/Important)"}
+            ];
+            categories.forEach(cat => {
+                const option = document.createElement("option");
+                option.value = cat.value;
+                option.textContent = cat.label;
+                if(task.category === cat.value) option.selected = true;
+                categoryEdit.appendChild(option);
+            });
+
+            // Replace task text with both inputs
+            taskContent.innerHTML = ""; // clear existing
+            taskContent.appendChild(inputEdit);
+            taskContent.appendChild(categoryEdit);
             inputEdit.focus();
 
-            inputEdit.addEventListener("blur", () => {
-                // Update in localStorage if needed
-                tasks[index].text = inputEdit.value;
+            // Save on blur of either field
+            const saveEdit = () => {
+                const newText = inputEdit.value.trim();
+                const newCategory = categoryEdit.value;
+
+                task.text = newText;
+                task.category = newCategory;
+
+                // Save and re-render
                 localStorage.setItem("tasks", JSON.stringify(tasks));
                 renderTasks(filterSelect.value);
-            });
+            };
 
-            inputEdit.addEventListener("keydown", (e) => {
+            inputEdit.addEventListener("blur", saveEdit);
+            categoryEdit.addEventListener("blur", saveEdit);
+
+            inputEdit.addEventListener("keydown", e => {
                 if(e.key === "Enter") inputEdit.blur();
             });
-     });
+        });
+        
           // Delete button
           const deleteBtn = document.createElement("button");
           deleteBtn.textContent = "🗑️";
@@ -228,7 +283,6 @@ function renderTasks(filter = "all") {
           // Assemble the task item
           taskItem.appendChild(dragHandle);
           taskItem.appendChild(checkbox);
-          taskItem.appendChild(taskText);
           taskItem.appendChild(categoryTag);
           taskItem.appendChild(taskContent);
           taskItem.appendChild(deleteBtn);

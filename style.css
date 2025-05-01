@@ -45,6 +45,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 nav ul {
@@ -79,7 +81,7 @@ nav li:hover {
     padding: 1rem 2rem;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.6s ease-out;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .stat-card {
@@ -109,8 +111,8 @@ nav li:hover {
     transform: scale(1.02);
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
+@keyframes fadeInUp {
+    from {opacity: 0; transform: translateY(20px);}
     to {opacity: 1; transform: translateY(0);}
 }
 
@@ -139,10 +141,6 @@ nav li:hover {
     position: relative;
 }
 
-.task.text{
-    flex-grow: 1;
-    padding: 0 0.5rem;
-}
 
 .task input,
 .task .task-text,
@@ -166,7 +164,7 @@ nav li:hover {
     background-color: #eef2ff !important;
     box-shadow: 0 0 10px rgba(79 70 229 0.3);
     transform: scale(1.02);
-    transition: transform 0.2s ease, box-shadow o.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .sortable-ghost {
@@ -235,17 +233,40 @@ nav li:hover {
 .edit-input {
     flex: 1;
     font-size: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-right: 8px;
     outline: none;
     background: #f9fafb;
-    transition: border 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .edit-input:focus {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    border-color: #007BFF;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+}
+
+.edit-category {
+    padding: 6px 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-right: 8px;
+    outline: none;
+    background-color: #fff;
+    color: #333;
+    min-width: 180px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.edit-category:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+}
+
+.edit-category:hover {
+    background-color: #f1f5ff;
 }
 
 .urgent-important {
@@ -272,7 +293,7 @@ nav li:hover {
     transition: all 0.2s ease;
 }
 
-.task.placeholder {
+.task-placeholder {
     background: #dbeafe;
     border: 2px dashed #60a5fa;
     min-height: 50px;
@@ -292,12 +313,6 @@ nav li:hover {
     100% {transform: scale(1);}
 }
 
-
-.completed {
-    text-decoration: line-through;
-    color: gray;
-    opacity: 0.6;
-}
 
 .delete-btn {
     background: transparent;
