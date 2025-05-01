@@ -242,16 +242,18 @@ function renderTasks(filter = "all") {
                 categoryEdit.appendChild(option);
             });
 
-            // Replace task text with both inputs
+            // Replace task content with editable fields
             taskContent.innerHTML = ""; // clear existing
             taskContent.appendChild(inputEdit);
             taskContent.appendChild(categoryEdit);
-            inputEdit.focus();
+            inputEdit.select(); // selects all text for quick edit
 
-            // Save on blur of either field
+            // Save Logic
             const saveEdit = () => {
                 const newText = inputEdit.value.trim();
                 const newCategory = categoryEdit.value;
+
+                if(!newText) return; // optional: prevent blank task names
 
                 task.text = newText;
                 task.category = newCategory;
@@ -261,7 +263,7 @@ function renderTasks(filter = "all") {
                 renderTasks(filterSelect.value);
             };
 
-            // Save after short delay, ensuring blur isn't caused by switching between fields
+            // Handle blur only if neither field is active
             const handleBlur = () => {
                 setTimeout(() => {
                     const active = document.activeElement;
