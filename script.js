@@ -219,6 +219,9 @@ function renderTasks(filter = "all") {
 
         // Double-click to edit
         taskText.addEventListener("dblclick", () => {
+            const originalText = task.text;
+            const originalCategory = task.category;
+
             // Create text input
             const inputEdit = document.createElement("input");
             inputEdit.type = "text";
@@ -242,10 +245,16 @@ function renderTasks(filter = "all") {
                 categoryEdit.appendChild(option);
             });
 
-            // Replace task content with editable fields
+            // Create save button (hidden initially)
+            const saveButton = document.createElement("button");
+            saveButton.classList.add("save-btn", "hidden");
+            saveButton.innerHTML = "✅ Save";
+
+            // Append elements
             taskContent.innerHTML = ""; // clear existing
             taskContent.appendChild(inputEdit);
             taskContent.appendChild(categoryEdit);
+            taskContent.appendChild(saveButton);
             inputEdit.select(); // selects all text for quick edit
 
             // Save Logic
@@ -263,11 +272,34 @@ function renderTasks(filter = "all") {
                 renderTasks(filterSelect.value);
             };
 
-            // Handle blur only if neither field is active
+            // Detect changes to show Save button
+            const checkForChanges = () => {
+                const currentText = inputEdit.value.trim();
+                const currentCategory = categoryEdit.value;
+                const changed = currentText !== originalText || currentCategory !== originalCategory;
+
+                if(changed){
+                    saveButton.classList.remove("hidden");
+                    saveButton.classList.add("animate-save-visible");
+                } else {
+                    saveButton.classList.add("hidden");
+                    saveButton.classList.remove("animate-save-visible");
+                }
+            };
+
+            inputEdit.addEventListener("input", checkForChanges);
+            categoryEdit.addEventListener("change", checkForChanges);
+
+            // Button click saves immediately
+            saveButton.addEventListener("click", () => {
+                saveEdit();
+            });
+
+            // Prevent blur save if focus is on Save button
             const handleBlur = () => {
                 setTimeout(() => {
                     const active = document.activeElement;
-                    if(active !== inputEdit && active !== categoryEdit){
+                    if(![inputEdit, categoryEdit, saveButton].includes(active)){
                         saveEdit();
                     }
                 }, 100);
@@ -275,7 +307,6 @@ function renderTasks(filter = "all") {
 
             inputEdit.addEventListener("blur", handleBlur);
             categoryEdit.addEventListener("blur", handleBlur);
-
             inputEdit.addEventListener("keydown", e => {
                 if(e.key === "Enter") inputEdit.blur();
             });
