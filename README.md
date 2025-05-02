@@ -14,12 +14,12 @@ A beautifully animated, intuitive to-do and productivity web app designed to hel
 
 - 🧠 Task categorization with Eisenhower Matrix tags
 - ✅ Checkbox completion with confetti animation
-- 🏆 Achievement system (in progress)
-- 📊 Stats tracking & completion analytics (coming soon)
+- 🏆 Achievement system with sound & animation (v1 implemented)
+- 📊 Stats dashboard showing completed task count and progress (v1 live)
 - 🕹️ Drag-and-drop task sorting (SortableJS)
-- 🎯 Daily goals & motivational quotes (coming soon)
+- 🎯 Daily goal tracker & motivational quote card (coming soon)
 - 📱 Fully responsive mobile-first design
-- 💾 Data persistence using LocalStorage
+- 💾 LocalStorage data persistence
 
 ---
 
@@ -29,13 +29,15 @@ A beautifully animated, intuitive to-do and productivity web app designed to hel
 - **Vanilla JavaScript**
 - [SortableJS](https://sortablejs.github.io/Sortable/) for drag-and-drop
 - [Canvas Confetti](https://www.kirilv.com/canvas-confetti/) for animations
-- LocalStorage for saving tasks
+- LocalStorage for saving tasks and user progress
 
 ---
 
 ## 💡 Inspiration
 
-This project is part of my **AI Career & Life Planner** portfolio. It highlights my front-end engineering skills, UX focus, and passion for building tools that empower productivity, reflection, and personal growth.
+This project is part of my **AI Career & Life Planner** portfolio. It highlights my front-end engineering skills, UX focus, and passion for building tools that empower productivity, reflection, and personal growth. 
+
+Future updates will transform this into a full-stack AI assistant to help users land jobs, track goals, and stay accountable.
 
 ---
 
@@ -53,33 +55,35 @@ This project is part of my **AI Career & Life Planner** portfolio. It highlights
 ```bash
 git clone https://github.com/MiltonClark2/smart-productivity-app.git
 cd smart-productivity-app
-Then open index.html in your browser, or use Live Server in VS Code.
+```
+
+Then open `index.html` in your browser, or use Live Server in VS Code.
 
 ---
 
-🧩 Planned Features
-🔄 React-based refactor with reusable components
+## 🧩 Planned Features
 
-🔐 Firebase or Supabase login & task syncing
-
-📆 Daily goal tracking system
-
-💼 Career search powered by job APIs
-
-🧠 AI-powered life & career planning assistant
-
-🥇 Pop-up medal system for streaks & milestones
+- 🔄 React-based refactor with reusable components
+- 🔐 Firebase or Supabase login & user task syncing
+- 📆 Daily goal tracking system
+- 💬 Motivational quote generator
+- 💼 Career search powered by job APIs
+- 🧠 AI-powered life & career planning assistant
+- 🥇 Medal system for 5+ daily task completions
+- ✍️ Writing companion & reflection prompts
 
 ---
 
-🤝 Connect With Me
-LinkedIn 
-https://linkedin.com/in/milton-clark-93674b114
+## 🤝 Connect With Me
 
-Medium
-https://medium.com/@miltonclark247
+**LinkedIn**  
+[https://linkedin.com/in/milton-clark-93674b114](https://linkedin.com/in/milton-clark-93674b114)
 
-GitHub
-https://github.com/MiltonClark2
+**Medium**  
+[https://medium.com/@miltonclark247](https://medium.com/@miltonclark247)
+
+**GitHub**  
+[https://github.com/MiltonClark2](https://github.com/MiltonClark2)
+
 
 
