@@ -313,6 +313,32 @@ nav li:hover {
     100% {transform: scale(1);}
 }
 
+.save-btn {
+    margin-left: 8px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.save-btn.animate-save-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.save-btn:hover {
+    background: #218838;
+}
+
+.hidden {
+    display: none;
+}
 
 .delete-btn {
     background: transparent;
