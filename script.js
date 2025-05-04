@@ -8,7 +8,7 @@ const formattedDate = today.toLocaleDateString("en-US", {
 });
 dateEl.textContent = formattedDate;
 
-//Loads tasks from storage or starts fresh is none exist
+// Loads tasks from storage or starts fresh is none exist
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 // Basic To-Do List functionality
@@ -16,6 +16,27 @@ const input = document.querySelector(".todo input");
 const taskList = document.getElementById("task-list");
 const filterSelect = document.getElementById("filter-select"); // Optional filter dropdown
 const categorySelect = document.getElementById("category-select");
+
+// Function to load quotes
+async function loadDailyQuote(){
+    const quoteText = document.getElementById("quote-text");
+    const quoteAuthor = document.getElementById("quote-author");
+
+    try{
+        const res = await fetch("https://api.quotable.io/random");
+        const data = await res.json();
+
+        quoteText.textContent = `"${data.content}"`;
+        quoteAuthor.textContent = `- ${data.author}`;
+    } catch (error){
+        console.error("Quote fetch failed:", error);
+        quoteText.textContent = `"Stay focused and keep building."`;
+        quoteAuthor.textContent = "- AI Coach";
+    }
+}
+
+window.addEventListener("DOMContentLoaded", loadDailyQuote);
+
 
 // Animate a single value
 function animateValue(element, start, end, duration){
