@@ -408,6 +408,37 @@ nav li:hover {
     font-size: 1rem;
 }
 
+#medal-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: gold;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 9999;
+}
+
+#medal-popup.show {
+    display: block;
+    opacity: 1;
+}
+
+.medal-animate {
+    animation: pop-scale 0.4s ease forwards;
+}
+
+@keyframes pop-scale {
+    0% {transform: scale(0.8); opacity: 0;}
+    50% {transform: scale(1.1); opacity: 1;}
+    100% {transform: scale(1);}
+}
+
 .medal-popup {
     position: fixed;
     top: 50%;

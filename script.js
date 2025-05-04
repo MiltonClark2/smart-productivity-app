@@ -61,14 +61,16 @@ function showMedalPopUp(){
     const medalSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_8bcee6994b.mp3"); // free success sound
     medalSound.play();
 
-    medalPopup.classList.add("show");
+    medalPopup.classList.add("show", "medal-animate");
     medalPopup.style.display = "block";
 
     setTimeout(() => {
+        medalPopup.classList.remove("medal-animate");
+    }, 2500); // remove animation class before hiding
+
+    setTimeout(() => {
         medalPopup.classList.remove("show");
-        setTimeout(() => {
-            medalPopup.style.display = "none";
-        }, 500);
+        medalPopup.style.display = "none";
     }, 3000); // 3-second pop-up
 }
 
@@ -320,7 +322,8 @@ function renderTasks(filter = "all") {
 
                 // Save and re-render
                 saveTasks();
-                renderTasks(filterSelect.value);
+                // Delay rendering to prevent flicker during blur transition
+                setTimeout(() => renderTasks(filterSelect.value), 10);
             };
 
             // Detect changes to show Save button
