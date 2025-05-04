@@ -55,7 +55,7 @@ function animateValue(element, start, end, duration){
 
 function updateStats(){
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    const todayStr = today.toISOString().split("T")[0];
+    const todayStr = new Date().toISOString().split("T")[0];
 
     const createdToday = tasks.filter(task => 
         String(task.createdAt || '').split('T')[0] === todayStr
@@ -365,9 +365,11 @@ function renderTasks(filter = "all") {
           taskList.appendChild(taskItem);
 
            // Trigger fade-in
-        setTimeout(() => {
+       if(!task.completed && !taskItem.classList.contains("show")){
+        requestAnimationFrame(() => {
             taskItem.classList.add("show");
-        }, 10);
+        });
+       }
     });  
 };
 
@@ -386,7 +388,7 @@ new Sortable(taskList, {
         const filteredIndices = tasks.reduce((acc, task, i) => {
             if(currentFilter === "all") acc.push(i);
             else if(currentFilter === "active" && !task.completed) acc.push(i);
-            else if(currentFilter === "completed" && task.completed) add.push(i);
+            else if(currentFilter === "completed" && task.completed) acc.push(i);
             return acc;
         }, []);
 
