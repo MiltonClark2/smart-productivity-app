@@ -55,14 +55,14 @@ function animateValue(element, start, end, duration){
 
 function updateStats(){
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    const today = new Date().toISOString().split('T')[0];
+    const todayStr = today.toISOString().split("T")[0];
 
     const createdToday = tasks.filter(task => 
-        task.createdAt && task.createdAt.split('T')[0] === today
+        String(task.createdAt || '').split('T')[0] === todayStr
     ).length;
 
     const completedToday = tasks.filter(task => 
-        task.completed && task.completedDate === today
+        task.completed && task.completedDate === todayStr
     ).length;
 
     const totalTasks = tasks.length;
@@ -76,6 +76,9 @@ function updateStats(){
     animateValue(createdTodayEl, 0, createdToday, 500);
     animateValue(completedTodayEl, 0, completedToday, 500);
     animateValue(completionRateEl, 0, totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0, 500)
+
+    // Logic for achievement of 5 completed tasks
+    if(completedToday === 5) showMedalPopUp();
 
 /*
     document.getElementById('created-today').textContent = createdToday;
@@ -94,14 +97,20 @@ function createTask(text, category){
     };
 }
 
+// Helper function for optimization
+function saveTasks(){
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
 input.addEventListener("keypress", function (e){
     if(e.key === "Enter" && input.value.trim() !== ""){
         // Add to tasks array
         tasks.push(createTask(input.value, categorySelect.value));
 
         // Save and re-render
-        localStorage.setItem("tasks", JSON.stringify(tasks));
+        saveTasks();
         renderTasks();
+        updateStats();
 
         // Clear input
         input.value = "";
@@ -228,12 +237,14 @@ function renderTasks(filter = "all") {
             }
 
             // Saves and updates local storage
-            localStorage.setItem("tasks", JSON.stringify(tasks));
+            saveTasks();
             renderTasks(filterSelect.value);
             updateStats(); // Tracks progress in real-time
+            
 
            // Logic for confetti at task complete
             if(task.completed){
+                new Audio('sounds/success.mp3').play();
                 celebrateBurst();
             }
         });
@@ -289,7 +300,7 @@ function renderTasks(filter = "all") {
                 task.category = newCategory;
 
                 // Save and re-render
-                localStorage.setItem("tasks", JSON.stringify(tasks));
+                saveTasks();
                 renderTasks(filterSelect.value);
             };
 
@@ -323,6 +334,7 @@ function renderTasks(filter = "all") {
                     if(![inputEdit, categoryEdit, saveButton].includes(active)){
                         saveEdit();
                     }
+                    if(saveButton.classList.contains("hidden")) return;
                 }, 100);
             };
 
@@ -340,7 +352,7 @@ function renderTasks(filter = "all") {
            // Add click event to delete task
          deleteBtn.addEventListener("click", () => {
             tasks.splice(index, 1);
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            saveTasks();
             renderTasks(filterSelect.value);
         });
 
@@ -370,30 +382,22 @@ new Sortable(taskList, {
 
         if(currentFilter === "completed") return; // No dragging allowed here
 
-        // Get the filtered list of tasks
-        let filteredTasks = tasks.filter(task => {
-            if(currentFilter === "active") return !task.completed;
-            return true; // 'all'
-        });
+        // Build a map of the filtered task indices
+        const filteredIndices = tasks.reduce((acc, task, i) => {
+            if(currentFilter === "all") acc.push(i);
+            else if(currentFilter === "active" && !task.completed) acc.push(i);
+            else if(currentFilter === "completed" && task.completed) add.push(i);
+            return acc;
+        }, []);
+
+        const fromIndex = filteredIndices[evt.oldIndex];
+        const toIndex = filteredIndices[evt.newIndex];
+
+        // Swap tasks in full array
+        const [movedTask] = tasks.splice(fromIndex, 1);
+        tasks.splice(toIndex, 0, movedTask);
         
-        // Remove and re-insert in filtered view
-        const movedItem = filteredTasks.splice(evt.oldIndex, 1)[0];
-        filteredTasks.splice(evt.newIndex, 0, movedItem);
-
-        //Rebuild the full tasks array based on new filtered order
-        let newTasks = [];
-        let filteredIndex = 0;
-        for(let task of tasks){
-            if((currentFilter === "active" && !task.completed) || currentFilter === "all"){
-                newTasks.push(filteredTasks[filteredIndex]);
-                filteredIndex++;
-            } else {
-                newTasks.push(task);
-            }
-        }
-
-        tasks = newTasks;
-        localStorage.setItem("tasks", JSON.stringify(tasks));
+        saveTasks();
         renderTasks(currentFilter);
 
      // Animation for dropped item
