@@ -53,6 +53,25 @@ function animateValue(element, start, end, duration){
     window.requestAnimationFrame(step);
 }
 
+// Logic for 5 completed task medal popup
+function showMedalPopUp(){
+    const medalPopup = document.getElementById("medal-popup");
+    if(!medalPopup) return;
+
+    const medalSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_8bcee6994b.mp3"); // free success sound
+    medalSound.play();
+
+    medalPopup.classList.add("show");
+    medalPopup.style.display = "block";
+
+    setTimeout(() => {
+        medalPopup.classList.remove("show");
+        setTimeout(() => {
+            medalPopup.style.display = "none";
+        }, 500);
+    }, 3000); // 3-second pop-up
+}
+
 function updateStats(){
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const todayStr = new Date().toISOString().split("T")[0];
