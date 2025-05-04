@@ -9,7 +9,7 @@ const formattedDate = today.toLocaleDateString("en-US", {
 dateEl.textContent = formattedDate;
 
 // Loads tasks from storage or starts fresh is none exist
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 // Basic To-Do List functionality
 const input = document.querySelector(".todo input");
@@ -75,7 +75,6 @@ function showMedalPopUp(){
 }
 
 function updateStats(){
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const todayStr = new Date().toISOString().split("T")[0];
 
     const createdToday = tasks.filter(task => 
@@ -124,9 +123,10 @@ function saveTasks(){
 }
 
 input.addEventListener("keypress", function (e){
-    if(e.key === "Enter" && input.value.trim() !== ""){
+    const trimmed = input.value.trim();
+    if(e.key === "Enter" && trimmed.length > 0){
         // Add to tasks array
-        tasks.push(createTask(input.value, categorySelect.value));
+        tasks.push(createTask(trimmed, categorySelect.value));
 
         // Save and re-render
         saveTasks();
@@ -246,6 +246,8 @@ function renderTasks(filter = "all") {
         
         // Toggle task completion
         checkbox.addEventListener("change", () => {
+            const wasCompleted = task.completed; // Save current state
+
             task.completed = checkbox.checked;
 
             // Save today's date when task is marked complete
@@ -263,9 +265,13 @@ function renderTasks(filter = "all") {
             updateStats(); // Tracks progress in real-time
             
 
-           // Logic for confetti at task complete
-            if(task.completed){
-                new Audio('sounds/success.mp3').play();
+           // Logic for confetti at task complete only if it's the first time
+            if(task.completed && !wasCompleted){
+                try {
+                    new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_8bcee6994b.mp3').play();
+                } catch (e){
+                    console.warn("Success sound failed:", e);
+                }
                 celebrateBurst();
             }
         });
@@ -356,14 +362,20 @@ function renderTasks(filter = "all") {
                     if(![inputEdit, categoryEdit, saveButton].includes(active)){
                         saveEdit();
                     }
-                    if(saveButton.classList.contains("hidden")) return;
                 }, 100);
             };
 
             inputEdit.addEventListener("blur", handleBlur);
             categoryEdit.addEventListener("blur", handleBlur);
             inputEdit.addEventListener("keydown", e => {
-                if(e.key === "Enter") inputEdit.blur();
+                if(e.key === "Enter"){
+                    if(inputEdit.value.trim() !== ""){
+                        saveEdit();
+                    } else {
+                        inputEdit.classList.add("shake");
+                        setTimeout(() => inputEdit.classList.remove("shake"), 500);
+                    }
+                }
             });
         });
 
@@ -375,7 +387,8 @@ function renderTasks(filter = "all") {
          deleteBtn.addEventListener("click", () => {
             tasks.splice(index, 1);
             saveTasks();
-            renderTasks(filterSelect.value);
+            setTimeout(() => renderTasks(filterSelect.value), 10);
+            updateStats();
         });
 
           // Assemble the task item
@@ -404,8 +417,9 @@ new Sortable(taskList, {
     onEnd: function(evt){
         const currentFilter = filterSelect.value;
 
-        if(currentFilter === "completed") return; // No dragging allowed here
-
+        if(currentFilter !== "all" && currentFilter !== "active") return; // Drag logic works only for all and active
+    
+    
         // Build a map of the filtered task indices
         const filteredIndices = tasks.reduce((acc, task, i) => {
             if(currentFilter === "all") acc.push(i);

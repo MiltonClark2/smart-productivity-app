@@ -1,4 +1,6 @@
-/* Reset & Base Styles */
+/* ========================
+   RESET & BASE STYLES
+======================== */
 * {
     margin: 0;
     padding: 0;
@@ -13,30 +15,35 @@ body {
     padding: 1rem;
 }
 
-/* Layout with Flexbox */
+/* ========================
+   LAYOUT
+======================== */
 .container {
     display: flex;
     gap: 2rem;
     margin-top: 1rem;
+    flex-wrap: wrap;
 }
 
-nav {
-    flex: 1;
+nav, main {
     background: #ffffff;
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-main {
-    flex: 3;
-    background: #ffffff;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+nav {
+    flex: 1;
 }
 
-/* Styling Components */
+main {
+    flex: 3;
+    padding: 1.5rem;
+}
+
+/* ========================
+   HEADER
+======================== */
 header {
     background-color: #4f46e5;
     color: white;
@@ -49,6 +56,9 @@ header {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* ========================
+   NAVIGATION
+======================== */
 nav ul {
     list-style: none;
 }
@@ -66,40 +76,27 @@ nav li:hover {
     background: #c7d2fe;
 }
 
+/* ========================
+   QUOTE CARD
+======================== */
 .quote-card {
     background: linear-gradient(135deg, #fefcea, #f1da36);
     padding: 1em 1.5em;
     margin-bottom: 1em;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1s ease-in-out;
     font-style: italic;
     color: #333;
+    animation: fadeIn 1s ease-in-out;
+    transition: transform 0.3s ease;
 }
 
 .quote-card:hover {
     transform: scale(1.02);
 }
-.loader {
-    width: 12px;
-    height: 12px;
-    border: 2px solid #999;
-    border-top: 2px solid transparent;
-    border-radius: 50%;
-    display: inline-block;
-    animation: spin 1s linear infinite;
-    margin-right: 8px;
-    vertical-align: middle;
-}
-
-@keyframes spin {
-    0% {transform: rotate(0deg);}
-    100% {transform: rotate(360deg);}
-}
 
 #quote-text {
     font-size: 1.1rem;
-    font-style: italic;
     margin-bottom: 0.5rem;
 }
 
@@ -110,11 +107,150 @@ nav li:hover {
     text-align: right;
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-10px);}
-    to {opacity: 1; transform: translateY(0);}
+/* ========================
+   TASKS & TODO
+======================== */
+.todo input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
 }
 
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Task Variants */
+.task.show {
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+}
+
+.task:hover {
+    background: #f0f4ff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.task-text.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+    color: gray;
+}
+
+/* ========================
+   DRAG & DROP
+======================== */
+.drag-handle {
+    cursor: grab;
+    font-size: 1.25rem;
+    color: #bbb;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: #4f46e5;
+}
+
+.sortable-chosen {
+    background-color: #eef2ff !important;
+    box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+    transform: scale(1.02);
+}
+
+.sortable-ghost {
+    opacity: 0.5;
+    background-color: #c7d2fe !important;
+}
+
+.task.dragging {
+    opacity: 0.5;
+    transform: rotate(2deg) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.task-placeholder {
+    background: #dbeafe;
+    border: 2px dashed #60a5fa;
+    min-height: 50px;
+    opacity: 0.8;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+/* ========================
+   CATEGORIES & SELECTS
+======================== */
+#category-select,
+#filter-select {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.category-tag {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #3730a3;
+    background-color: #eef2ff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+/* ========================
+   PRIORITY COLORS
+======================== */
+.urgent-important       { background-color: #fee2e2; }
+.urgent-not-important   { background-color: #fef3c7; }
+.not-urgent-important   { background-color: #d1fae5; }
+.not-urgent-not-important { background-color: #e0e7ff; }
+
+/* ========================
+   MEDAL POPUP
+======================== */
+#medal-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: gold;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 9999;
+}
+
+#medal-popup.show {
+    display: block;
+    opacity: 1;
+}
+
+/* ========================
+   STATS DASHBOARD
+======================== */
 .stats-dashboard {
     display: flex;
     justify-content: space-around;
@@ -145,170 +281,37 @@ nav li:hover {
     transition: transform 0.3s ease;
 }
 
-.stat-card h3 {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-}
-
-.stat-card p {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 0;
-}
-
 .stat-card:hover {
     transform: scale(1.02);
 }
 
-@keyframes fadeInUp {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
-.todo input {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
-
-
-.task {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.75rem;
-    border-radius: 10px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    transform: translateY(10px);
-    opacity: 0;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-
-.task input,
-.task .task-text,
-.task .delete-btn {
-    pointer-events: auto;
-}
-
-.drag-handle {
-    cursor: grab;
-    font-size: 1.25rem;
-    color: #bbb;
-    transition: color 0.2s ease;
-    user-select: none;
-}
-
-.drag-handle:hover {
-    color: #4f46e5;
-}
-
-.sortable-chosen {
-    background-color: #eef2ff !important;
-    box-shadow: 0 0 10px rgba(79 70 229 0.3);
-    transform: scale(1.02);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.sortable-ghost {
-    opacity: 0.5;
-    background-color: #c7d2fe !important;
-}
-
-
-.task.show {
-    transform: translateY(0);
-    opacity: 1;
-    transition: all 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
-}
-
-.task-checkbox {
-    margin-right: 10px;
-    transform: scale(1.2);
-}
-
-.task-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-}
-
-.task-text {
+/* ========================
+   FORM CONTROLS
+======================== */
+.edit-input,
+.edit-category {
     font-size: 1rem;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-#category-select {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-}
-
-.category-tag {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #3730a3;
-    background-color: #eef2ff;
-    padding: 0.3rem 0.6rem;
-    border-radius: 5px;
-    margin-left: 10px;
-    white-space: nowrap;
-}
-
-.task-text.completed {
-    text-decoration: line-through;
-    opacity: 0.6;
-    color: gray;
-}
-
-.task:hover {
-    background: #f0f4ff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* Soft shadow */
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .edit-input {
     flex: 1;
-    font-size: 1rem;
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
     margin-right: 8px;
-    outline: none;
     background: #f9fafb;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.edit-input:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
 }
 
 .edit-category {
-    padding: 6px 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
     margin-right: 8px;
-    outline: none;
-    background-color: #fff;
-    color: #333;
     min-width: 180px;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    color: #333;
 }
 
+.edit-input:focus,
 .edit-category:focus {
     border-color: #007BFF;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
@@ -318,50 +321,9 @@ nav li:hover {
     background-color: #f1f5ff;
 }
 
-.urgent-important {
-    background-color: #fee2e2; /* light red */
-}
-
-.urgent-not-important {
-    background-color: #fef3c7; /* soft yellow */
-}
-
-.not-urgent-important {
-    background-color: #d1fae5; /* mint green */
-}
-
-.not-urgent-not-important {
-    background-color: #e0e7ff; /* calm blue */
-}
-
-/* Dragging styles */
-.task.dragging {
-    opacity: 0.5;
-    transform: rotate(2deg) scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-}
-
-.task-placeholder {
-    background: #dbeafe;
-    border: 2px dashed #60a5fa;
-    min-height: 50px;
-    opacity: 0.8;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-}
-/* Bounce animation for dropped item */
-.task.dropped {
-    animation: bounce 0.4s ease;
-}
-
-@keyframes bounce {
-    0% {transform: scale(1);}
-    30% {transform: scale(1.05);}
-    60% {transform: scale(0.97);}
-    100% {transform: scale(1);}
-}
-
+/* ========================
+   BUTTONS
+======================== */
 .save-btn {
     margin-left: 8px;
     padding: 5px 10px;
@@ -385,10 +347,6 @@ nav li:hover {
     background: #218838;
 }
 
-.hidden {
-    display: none;
-}
-
 .delete-btn {
     background: transparent;
     border: none;
@@ -402,67 +360,63 @@ nav li:hover {
     color: #ef4444;
 }
 
-#filter-select {
-    margin: 10px 0;
-    padding: 5px;
-    font-size: 1rem;
-}
-
-#medal-popup {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: gold;
-    color: black;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+.hidden {
     display: none;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 9999;
 }
 
-#medal-popup.show {
-    display: block;
-    opacity: 1;
+/* ========================
+   ANIMATIONS
+======================== */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-10px);}
+    to {opacity: 1; transform: translateY(0);}
 }
 
-.medal-animate {
-    animation: pop-scale 0.4s ease forwards;
+@keyframes fadeInUp {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
 }
 
-@keyframes pop-scale {
-    0% {transform: scale(0.8); opacity: 0;}
-    50% {transform: scale(1.1); opacity: 1;}
+@keyframes bounce {
+    0%   {transform: scale(1);}
+    30%  {transform: scale(1.05);}
+    60%  {transform: scale(0.97);}
     100% {transform: scale(1);}
 }
 
-.medal-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.8);
-    padding: 20px 30px;
-    background: gold;
-    color: black;
-    font-weight: bold;
-    font-size: 1.5em;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    z-index: 9999;
-    transition: all 0.5s ease-in-out;
-    pointer-events: none;
+@keyframes pop-scale {
+    0%   {transform: scale(0.8); opacity: 0;}
+    50%  {transform: scale(1.1); opacity: 1;}
+    100% {transform: scale(1);}
 }
 
-.medal-popup.show {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+@keyframes shake {
+    0%, 100% {transform: translateX(0);}
+    25% {transform: translateX(-4px);}
+    50% {transform: translateX(4px);}
+    75% {transform: translateX(-4px);}
 }
 
-/* Makes App Responsive */
+@keyframes spin {
+    0%   {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
+.loader {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #999;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* ========================
+   RESPONSIVE
+======================== */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
