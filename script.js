@@ -130,7 +130,7 @@ input.addEventListener("keypress", function (e){
 
         // Save and re-render
         saveTasks();
-        renderTasks();
+        renderTasks(filterSelect.value);
         updateStats();
 
         // Clear input
@@ -252,6 +252,7 @@ function renderTasks(filter = "all") {
 
             // Save today's date when task is marked complete
             if(task.completed){
+                filterSelect.value = "completed";
                 task.completedDate = new Date().toISOString().split('T')[0];
                 task.completedAt = new Date().toISOString(); // Saves the full timestamp
             } else {
@@ -261,6 +262,7 @@ function renderTasks(filter = "all") {
 
             // Saves and updates local storage
             saveTasks();
+            // console.log("Rendering with filter:", filterSelect.value); 
             renderTasks(filterSelect.value);
             updateStats(); // Tracks progress in real-time
             
@@ -456,7 +458,7 @@ if(filterSelect){
 }
 
 // Initial Render
-renderTasks();
+renderTasks(filterSelect?.value || "all");
 updateStats(); // Keep dashboard in sync on initial load
 
 
