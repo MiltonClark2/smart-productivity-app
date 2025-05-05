@@ -11,6 +11,14 @@ dateEl.textContent = formattedDate;
 // Loads tasks from storage or starts fresh is none exist
 const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+// Fix legacy tasks that are missing completedDate
+tasks.forEach(task => {
+    if(task.completed && !task.completedDate){
+        task.completedDate = new Date().toISOString().split('T')[0];
+    }
+});
+saveTasks();
+
 // Basic To-Do List functionality
 const input = document.querySelector(".todo input");
 const taskList = document.getElementById("task-list");
