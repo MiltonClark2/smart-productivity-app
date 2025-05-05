@@ -261,7 +261,6 @@ function renderTasks(filter = "all") {
 
             // Save today's date when task is marked complete
             if(task.completed){
-                
                 task.completedDate = new Date().toISOString().split('T')[0];
                 task.completedAt = new Date().toISOString(); // Saves the full timestamp
             } else {
@@ -411,7 +410,7 @@ function renderTasks(filter = "all") {
           taskList.appendChild(taskItem);
 
            // Trigger fade-in
-       if(!task.completed && !taskItem.classList.contains("show")){
+       if(!taskItem.classList.contains("show")){
         requestAnimationFrame(() => {
             taskItem.classList.add("show");
         });
