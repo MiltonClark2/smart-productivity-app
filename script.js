@@ -163,7 +163,8 @@ function formatCategory(value) {
 function renderTasks(filter = "all") {
     taskList.innerHTML = "";
 
-    tasks.forEach((task, index) => {
+        // Ensure tasks are up-to-date
+        tasks.forEach((task, index) => {
         if(filter === "completed" && !task.completed) return;
         if(filter === "active" && task.completed) return;
 
@@ -256,12 +257,11 @@ function renderTasks(filter = "all") {
         // Toggle task completion
         checkbox.addEventListener("change", () => {
             const wasCompleted = task.completed; // Save current state
-
             task.completed = checkbox.checked;
 
             // Save today's date when task is marked complete
             if(task.completed){
-                filterSelect.value = "completed";
+                
                 task.completedDate = new Date().toISOString().split('T')[0];
                 task.completedAt = new Date().toISOString(); // Saves the full timestamp
             } else {
