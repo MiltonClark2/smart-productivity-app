@@ -11,6 +11,11 @@ dateEl.textContent = formattedDate;
 // Loads tasks from storage or starts fresh is none exist
 const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+// Helper function for optimization
+function saveTasks(){
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
 // Fix legacy tasks that are missing completedDate
 tasks.forEach(task => {
     if(task.completed && !task.completedDate){
@@ -118,16 +123,12 @@ function updateStats(){
 // Helper function to create task and for future scalability
 function createTask(text, category){
     return {
+        id: crypto.randomUUID(), // Assign a unique ID
         text: text.trim(),
         completed: false,
         category: category,
         createdAt: new Date().toISOString() // Captures exact date and time task is created.
     };
-}
-
-// Helper function for optimization
-function saveTasks(){
-    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 input.addEventListener("keypress", function (e){
@@ -432,17 +433,19 @@ new Sortable(taskList, {
     
         // Build a map of the filtered task indices
         const filteredIndices = tasks.reduce((acc, task, i) => {
-            if(currentFilter === "all") acc.push(i);
-            else if(currentFilter === "active" && !task.completed) acc.push(i);
-            else if(currentFilter === "completed" && task.completed) acc.push(i);
-            return acc;
+            if((currentFilter === "all") || (currentFilter === "active" && !task.completed)
+            ){
+                acc.push(i);
+            } return acc;
         }, []);
 
+        // Map DOM positions to actual task array indices
         const fromIndex = filteredIndices[evt.oldIndex];
         const toIndex = filteredIndices[evt.newIndex];
 
         // Swap tasks in full array
-        const [movedTask] = tasks.splice(fromIndex, 1);
+        if(fromIndex !== undefined && toIndex !== undefined){
+            const [movedTask] = tasks.splice(fromIndex, 1);
         tasks.splice(toIndex, 0, movedTask);
         
         saveTasks();
@@ -455,6 +458,7 @@ new Sortable(taskList, {
         droppedEl.classList.add("dropped");
         setTimeout(() => droppedEl.classList.remove("dropped"), 400);
      }   
+        }   
     }
 });
 
