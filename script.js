@@ -18,6 +18,7 @@ function saveTasks(){
 
 // Fix legacy tasks that are missing completedDate
 tasks.forEach(task => {
+    if(typeof task.completed !== 'boolean') task.completed = false;
     if(task.completed && !task.completedDate){
         task.completedDate = new Date().toISOString().split('T')[0];
     }
@@ -154,7 +155,7 @@ function formatCategory(value) {
         case "urgent-not-important": return "⚡ Urgent, Not Important";
         case "not-urgent-important": return "🌱 Not Urgent, Important";
         case "not-urgent-not-important": return "🌈 Chill (Not Urgent/Important)";
-        default: return "";
+        default: return "📌 Uncategorized";
     }
 }
 
@@ -427,8 +428,10 @@ new Sortable(taskList, {
     onEnd: function(evt){
         const currentFilter = filterSelect.value;
 
-        if(currentFilter !== "all" && currentFilter !== "active") return; // Drag logic works only for all and active
-    
+        // Drag logic works only for all and active
+        if(currentFilter === "completed"){
+            taskList.classList.add("disable-drag");
+        } 
     
         // Build a map of the filtered task indices
         const filteredIndices = tasks.reduce((acc, task, i) => {
