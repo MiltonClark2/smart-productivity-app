@@ -360,6 +360,21 @@ nav li:hover {
     color: #ef4444;
 }
 
+.btn-clear-completed {
+    background-color: #ff5f5f;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-clear-completed:hover {
+    background-color: #e04b4b;
+}
+
 .hidden {
     display: none;
 }

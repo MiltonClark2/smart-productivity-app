@@ -402,6 +402,15 @@ function renderTasks(filter = "all") {
             updateStats();
         });
 
+        // Clear all completed task button
+        const clearCompletedBtn = document.getElementById("clear-completed-btn");
+
+        clearCompletedBtn.addEventListener("click", () => {
+            const completedTasks = document.querySelectorAll(".task.completed");
+            completedTasks.forEach(task => task.remove());
+            updateStats(); // To update stats for dashboard task count
+        });
+
           // Assemble the task item
           taskItem.appendChild(dragHandle);
           taskItem.appendChild(checkbox);
