@@ -360,23 +360,33 @@ nav li:hover {
     color: #ef4444;
 }
 
-.btn-clear-completed {
+.clear-btn {
     background-color: #ff5f5f;
     color: white;
     border: none;
-    padding: 8px 14px;
+    padding: 8px 16px;
     border-radius: 6px;
     margin-top: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-weight: bold;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.btn-clear-completed:hover {
+.clear-btn:hover {
     background-color: #e04b4b;
 }
 
-.hidden {
-    display: none;
+.clear-btn.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.clear-btn.hidden {
+    opacity: 0;
+    transform: translateY(10px);
 }
 
 /* ========================

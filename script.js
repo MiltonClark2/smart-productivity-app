@@ -8,7 +8,13 @@ const formattedDate = today.toLocaleDateString("en-US", {
 });
 dateEl.textContent = formattedDate;
 
-// Loads tasks from storage or starts fresh is none exist
+const lastMedalShown = localStorage.getItem("medalShownToday");
+const todayStr = today.toISOString().split("T")[0];
+if(lastMedalShown !== todayStr){
+    localStorage.removeItem("medalShownToday");
+}
+
+// Loads tasks from storage or starts fresh if none exist
 const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 // Helper function for optimization
@@ -111,8 +117,41 @@ function updateStats(){
     animateValue(completionRateEl, 0, totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0, 500)
 
     // Logic for achievement of 5 completed tasks
-    if(completedToday === 5) showMedalPopUp();
+    if(completedToday === 5 && !localStorage.getItem("medalShownToday")){
+        showMedalPopUp();
+        localStorage.setItem("medalShownToday", new Date().toISOString().split("T")[0]);
+    } 
+
+    updateClearButtonVisibility();
 }
+
+// Clear completed task button logic
+const clearCompletedBtn = document.getElementById("clear-completed-btn");
+
+function updateClearButtonVisibility(){
+    const hasCompleted = tasks.some(task => task.completed);
+    if(hasCompleted){
+        clearCompletedBtn.classList.add("show");
+        clearCompletedBtn.classList.remove("hidden");
+    } else {
+        clearCompletedBtn.classList.add("hidden");
+        clearCompletedBtn.classList.remove("show");
+    }
+}
+
+clearCompletedBtn.addEventListener("click", () => {
+    const confirmed = confirm("Are you sure you want to clear all completed tasks?");
+    if(confirmed){
+        // Remove completed tasks from array
+        const remainingTasks = tasks.filter(task => !task.completed);
+        tasks.length = 0; // Clear the array in place
+        tasks.push(...remainingTasks); // Replace with filtered list
+        saveTasks();
+        renderTasks(filterSelect.value);
+        updateStats(); // Update stats for dashboard task count
+        updateClearButtonVisibility();
+    }
+});
 
 // Helper function to create task and for future scalability
 function createTask(text, category){
@@ -135,6 +174,7 @@ input.addEventListener("keypress", function (e){
         saveTasks();
         renderTasks(filterSelect.value);
         updateStats();
+        updateClearButtonVisibility();
 
         // Clear input
         input.value = "";
@@ -268,6 +308,7 @@ function renderTasks(filter = "all") {
             // console.log("Rendering with filter:", filterSelect.value); 
             renderTasks(filterSelect.value);
             updateStats(); // Tracks progress in real-time
+            updateClearButtonVisibility();
             
 
            // Logic for confetti at task complete only if it's the first time
@@ -394,6 +435,7 @@ function renderTasks(filter = "all") {
             tasks.splice(index, 1); // Remove task
             saveTasks();
             setTimeout(() => renderTasks(filterSelect.value), 10);
+            updateClearButtonVisibility();
             updateStats();
         });
        
@@ -415,49 +457,54 @@ function renderTasks(filter = "all") {
 };
 
 // Enable SortableJS (for drag and drop feature)
-new Sortable(taskList, {
-    animation: 150,
-    handle: ".drag-handle",
-    ghostClass: "placeholder",    // placeholder for where item is dropping
-    chosenClass: "dragging",      // the dragged item
-    onEnd: function(evt){
-        const currentFilter = filterSelect.value;
-
-        // Drag logic works only for all and active
-        if(currentFilter === "completed"){
-            taskList.classList.add("disable-drag");
-        } 
+if(typeof Sortable !== "undefined"){
+    new Sortable(taskList, {
+        animation: 150,
+        handle: ".drag-handle",
+        ghostClass: "placeholder",    // placeholder for where item is dropping
+        chosenClass: "dragging",      // the dragged item
+        onEnd: function(evt){
+            const currentFilter = filterSelect.value;
     
-        // Build a map of the filtered task indices
-        const filteredIndices = tasks.reduce((acc, task, i) => {
-            if((currentFilter === "all") || (currentFilter === "active" && !task.completed)
-            ){
-                acc.push(i);
-            } return acc;
-        }, []);
-
-        // Map DOM positions to actual task array indices
-        const fromIndex = filteredIndices[evt.oldIndex];
-        const toIndex = filteredIndices[evt.newIndex];
-
-        // Swap tasks in full array
-        if(fromIndex !== undefined && toIndex !== undefined){
-            const [movedTask] = tasks.splice(fromIndex, 1);
-        tasks.splice(toIndex, 0, movedTask);
+            // Drag logic works only for all and active
+            if(currentFilter === "completed"){
+                taskList.classList.add("disable-drag");
+            } 
         
-        saveTasks();
-        renderTasks(currentFilter);
+            // Build a map of the filtered task indices
+            const filteredIndices = tasks.reduce((acc, task, i) => {
+                if((currentFilter === "all") || (currentFilter === "active" && !task.completed)
+                ){
+                    acc.push(i);
+                } return acc;
+            }, []);
+    
+            // Map DOM positions to actual task array indices
+            const fromIndex = filteredIndices[evt.oldIndex];
+            const toIndex = filteredIndices[evt.newIndex];
+    
+            // Swap tasks in full array
+            if(fromIndex !== undefined && toIndex !== undefined){
+                const [movedTask] = tasks.splice(fromIndex, 1);
+            tasks.splice(toIndex, 0, movedTask);
+            
+            saveTasks();
+            renderTasks(currentFilter);
+    
+         // Animation for dropped item
+         const listItems = taskList.querySelectorAll(".task");
+         const droppedEl = listItems[evt.newIndex];
+         if(droppedEl){
+            droppedEl.classList.add("dropped");
+            setTimeout(() => droppedEl.classList.remove("dropped"), 400);
+         }   
+            }   
+        }
+    });
+} else {
+    console.warn("SortableJS not loaded");
+}
 
-     // Animation for dropped item
-     const listItems = taskList.querySelectorAll(".task");
-     const droppedEl = listItems[evt.newIndex];
-     if(droppedEl){
-        droppedEl.classList.add("dropped");
-        setTimeout(() => droppedEl.classList.remove("dropped"), 400);
-     }   
-        }   
-    }
-});
 
 // Filter Logic
 if(filterSelect){
@@ -465,20 +512,6 @@ if(filterSelect){
         renderTasks(e.target.value);
     });
 };
-
-// Clear completed task button
-const clearCompletedBtn = document.getElementById("clear-completed-btn");
-
-clearCompletedBtn.addEventListener("click", () => {
-    // Remove completed tasks from array
-   const incompleteTasks = tasks.filter(task => !task.completed);
-   tasks.length = 0; // Clear original array
-   tasks.push(...incompleteTasks); // Replace with filtered list
-   
-   saveTasks();
-   renderTasks(filterSelect.value);
-   updateStats(); // To update stats for dashboard task count
-});
 
 // Initializing everything after DOM loads
 window.addEventListener("DOMContentLoaded", () => {
