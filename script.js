@@ -51,7 +51,6 @@ async function loadDailyQuote(){
 
 window.addEventListener("DOMContentLoaded", loadDailyQuote);
 
-
 // Animate a single value
 function animateValue(element, start, end, duration){
     let startTimestamp = null;
@@ -113,12 +112,6 @@ function updateStats(){
 
     // Logic for achievement of 5 completed tasks
     if(completedToday === 5) showMedalPopUp();
-
-/*
-    document.getElementById('created-today').textContent = createdToday;
-    document.getElementById('completed-today').textContent = completedToday;
-    document.getElementById('completion-rate').textContent = totalTasks > 0
-    ? `${Math.round((completedTasks / totalTasks) * 100)}%` : '0%';   */
 }
 
 // Helper function to create task and for future scalability
@@ -224,8 +217,9 @@ function renderTasks(filter = "all") {
                 const defaults = {
                     origin: {y: 0.6}
                 };
-
+                
                 function fire(particleRatio, opts){
+                    if(typeof confetti !== "function") return;
                     confetti(Object.assign({}, defaults, opts, {
                         particleCount: Math.floor(200 * particleRatio)
                     }));
@@ -390,27 +384,19 @@ function renderTasks(filter = "all") {
             });
         });
 
-          // Delete button
-          const deleteBtn = document.createElement("button");
-          deleteBtn.textContent = "🗑️";
-          deleteBtn.classList.add("delete-btn");
-           // Add click event to delete task
+         // Delete button
+         const deleteBtn = document.createElement("button");
+         deleteBtn.textContent = "🗑️";
+         deleteBtn.classList.add("delete-btn");
+         // Add click event to delete task
+
          deleteBtn.addEventListener("click", () => {
-            tasks.splice(index, 1);
+            tasks.splice(index, 1); // Remove task
             saveTasks();
             setTimeout(() => renderTasks(filterSelect.value), 10);
             updateStats();
         });
-
-        // Clear all completed task button
-        const clearCompletedBtn = document.getElementById("clear-completed-btn");
-
-        clearCompletedBtn.addEventListener("click", () => {
-            const completedTasks = document.querySelectorAll(".task.completed");
-            completedTasks.forEach(task => task.remove());
-            updateStats(); // To update stats for dashboard task count
-        });
-
+       
           // Assemble the task item
           taskItem.appendChild(dragHandle);
           taskItem.appendChild(checkbox);
@@ -478,10 +464,26 @@ if(filterSelect){
     filterSelect.addEventListener("change", (e) => {
         renderTasks(e.target.value);
     });
-}
+};
 
-// Initial Render
-renderTasks(filterSelect?.value || "all");
-updateStats(); // Keep dashboard in sync on initial load
+// Clear completed task button
+const clearCompletedBtn = document.getElementById("clear-completed-btn");
 
+clearCompletedBtn.addEventListener("click", () => {
+    // Remove completed tasks from array
+   const incompleteTasks = tasks.filter(task => !task.completed);
+   tasks.length = 0; // Clear original array
+   tasks.push(...incompleteTasks); // Replace with filtered list
+   
+   saveTasks();
+   renderTasks(filterSelect.value);
+   updateStats(); // To update stats for dashboard task count
+});
+
+// Initializing everything after DOM loads
+window.addEventListener("DOMContentLoaded", () => {
+    renderTasks(filterSelect?.value || "all");
+    updateStats(); // Keep dashboard in sync on initial load
+    loadDailyQuote(); // Load quote only after DOM is ready
+});
 
