@@ -129,13 +129,14 @@ function updateStats(){
 const clearCompletedBtn = document.getElementById("clear-completed-btn");
 
 function updateClearButtonVisibility(){
-    const hasCompleted = tasks.some(task => task.completed);
-    if(hasCompleted){
-        clearCompletedBtn.classList.add("show");
-        clearCompletedBtn.classList.remove("hidden");
+    const filter = filterSelect?.value || "all";
+    const hasCompletedTasks = tasks.some(task => task.completed);
+    const clearBtn = document.getElementById("clearCompletedBtn");
+
+    if(filter === "completed" && hasCompletedTasks){
+        clearBtn.classList.add("show");
     } else {
-        clearCompletedBtn.classList.add("hidden");
-        clearCompletedBtn.classList.remove("show");
+        clearBtn.classList.remove("show");
     }
 }
 
@@ -510,6 +511,7 @@ if(typeof Sortable !== "undefined"){
 if(filterSelect){
     filterSelect.addEventListener("change", (e) => {
         renderTasks(e.target.value);
+        updateClearButtonVisibility();
     });
 };
 

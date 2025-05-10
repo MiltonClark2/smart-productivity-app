@@ -121,17 +121,44 @@ nav li:hover {
 .task {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px;
     margin-bottom: 0.75rem;
     border-radius: 10px;
+    text-align: left;
     background: #f9fafb;
     border: 1px solid #e5e7eb;
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.3s ease;
     position: relative;
+}
+
+.task-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.task-controls select {
+    margin-right: 10px;
+}
+
+.task-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.task-text {
+    text-align: left;
+    width: 100%;
+    word-break: break-word;
 }
 
 /* Task Variants */
@@ -152,11 +179,16 @@ nav li:hover {
     color: gray;
 }
 
+.task .delete-btn {
+    margin-left: auto;
+}
+
 /* ========================
    DRAG & DROP
 ======================== */
 .drag-handle {
     cursor: grab;
+    margin-right: 8px;
     font-size: 1.25rem;
     color: #bbb;
     user-select: none;
@@ -212,7 +244,9 @@ nav li:hover {
     background-color: #eef2ff;
     padding: 0.3rem 0.6rem;
     border-radius: 5px;
-    margin-left: 10px;
+    margin-left: 0;
+    text-align: left;
+    min-width: max-content;
     white-space: nowrap;
 }
 
@@ -290,6 +324,9 @@ nav li:hover {
 ======================== */
 .edit-input,
 .edit-category {
+    width: 100%;
+    margin-top: 4px;
+    text-align: left;
     font-size: 1rem;
     padding: 6px 10px;
     border: 1px solid #ccc;
@@ -387,6 +424,22 @@ nav li:hover {
 .clear-btn.hidden {
     opacity: 0;
     transform: translateY(10px);
+}
+
+#clearCompletedBtn {
+    display: none; /* Hidden by default */
+    margin-left: auto;
+    padding: 8px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+#clearCompletedBtn.show {
+    display: inline-block;
 }
 
 /* ========================
