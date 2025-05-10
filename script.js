@@ -32,7 +32,7 @@ tasks.forEach(task => {
 saveTasks();
 
 // Basic To-Do List functionality
-const input = document.querySelector(".todo input");
+const input = document.getElementById("task-input");
 const taskList = document.getElementById("task-list");
 const filterSelect = document.getElementById("filter-select"); // Optional filter dropdown
 const categorySelect = document.getElementById("category-select");
@@ -93,6 +93,21 @@ function showMedalPopUp(){
     }, 3000); // 3-second pop-up
 }
 
+// Clear completed task button logic
+const clearCompletedBtn = document.getElementById("clear-completed-btn");
+
+function updateClearButtonVisibility(){
+    const filter = filterSelect?.value || "all";
+    const hasCompletedTasks = tasks.some(task => task.completed);
+    const clearBtn = document.getElementById("clear-completed-btn");
+
+    if(filter === "completed" && hasCompletedTasks){
+        clearBtn.classList.add("show");
+    } else {
+        clearBtn.classList.remove("show");
+    }
+}
+
 function updateStats(){
     const todayStr = new Date().toISOString().split("T")[0];
 
@@ -125,21 +140,6 @@ function updateStats(){
     updateClearButtonVisibility();
 }
 
-// Clear completed task button logic
-const clearCompletedBtn = document.getElementById("clear-completed-btn");
-
-function updateClearButtonVisibility(){
-    const filter = filterSelect?.value || "all";
-    const hasCompletedTasks = tasks.some(task => task.completed);
-    const clearBtn = document.getElementById("clearCompletedBtn");
-
-    if(filter === "completed" && hasCompletedTasks){
-        clearBtn.classList.add("show");
-    } else {
-        clearBtn.classList.remove("show");
-    }
-}
-
 clearCompletedBtn.addEventListener("click", () => {
     const confirmed = confirm("Are you sure you want to clear all completed tasks?");
     if(confirmed){
@@ -165,7 +165,7 @@ function createTask(text, category){
     };
 }
 
-input.addEventListener("keypress", function (e){
+input.addEventListener("keydown", function (e){
     const trimmed = input.value.trim();
     if(e.key === "Enter" && trimmed.length > 0){
         // Add to tasks array
