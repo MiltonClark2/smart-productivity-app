@@ -426,21 +426,6 @@ nav li:hover {
     transform: translateY(10px);
 }
 
-#clearCompletedBtn {
-    display: none; /* Hidden by default */
-    margin-left: auto;
-    padding: 8px 12px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-
-#clearCompletedBtn.show {
-    display: inline-block;
-}
 
 /* ========================
    ANIMATIONS
