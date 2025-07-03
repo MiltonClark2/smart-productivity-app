@@ -101,6 +101,8 @@ function updateClearButtonVisibility(){
     const hasCompletedTasks = tasks.some(task => task.completed);
     const clearBtn = document.getElementById("clear-completed-btn");
 
+    if(!clearBtn) return;
+
     if(filter === "completed" && hasCompletedTasks){
         clearBtn.classList.add("show");
     } else {
@@ -309,7 +311,6 @@ function renderTasks(filter = "all") {
             // console.log("Rendering with filter:", filterSelect.value); 
             renderTasks(filterSelect.value);
             updateStats(); // Tracks progress in real-time
-            updateClearButtonVisibility();
             
 
            // Logic for confetti at task complete only if it's the first time
@@ -436,7 +437,6 @@ function renderTasks(filter = "all") {
             tasks.splice(index, 1); // Remove task
             saveTasks();
             setTimeout(() => renderTasks(filterSelect.value), 10);
-            updateClearButtonVisibility();
             updateStats();
         });
        
@@ -455,6 +455,9 @@ function renderTasks(filter = "all") {
         });
        }
     });  
+
+    updateStats();
+    updateClearButtonVisibility();
 };
 
 // Enable SortableJS (for drag and drop feature)
