@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <h1>AI Career + Life Planner</h1>
+        <h1>Goal Tracker</h1>
         <p id="date"></p>
     </header>
 
@@ -18,29 +18,6 @@
             <section id="quote-card" class="quote-card">
                 <p id="quote-text"><span class="loader"></span> Loading quote...</p>
                 <span id="quote-author"></span>
-            </section>
-
-            <section class="greeting">
-                <h2>Welcome, Milton 👋</h2>
-            </section>
-
-            <section id="stats-dashboard" class="stats">
-                <h2>📊 Your Productivity Stats</h2>
-                <div class="stat-card">
-                    <p>📝 Tasks Created Today: <span id="created-today">0</span></p>
-                </div>
-                <div class="stat-card">
-                    <p>✅ Tasks Completed Today: <span id="completed-today">0</span></p>
-                </div>
-                <div class="stat-card">
-                    <p>📈 Completion Rate: <span id="completion-rate">0%</span></p>
-                </div>
-                <div class="stat-card">
-                    <p>🔥 Current Streak: <span id="streak-count">0</span> days</p>
-                </div>
-                <div class="stat-card">
-                    <p>📅 Weekly Tasks: <span id="weekly-tasks">0</span></p>
-                </div>
             </section>
 
             <section class="todo">
@@ -68,6 +45,7 @@
             </button>
                 </div>
             </section>
+            
             <!--Task List Container-->
             <section class="matrix-grid">
                 <div class="matrix-quadrant urgent-important" data-category="urgent-important">
@@ -85,6 +63,25 @@
                 <div class="matrix-quadrant not-urgent-not-important" data-category="not-urgent-not-important">
                     <h3>🌈 Not Urgent & Not Important</h3>
                     <ul id="not-urgent-not-important-list" class="task-list"></ul>
+                </div>
+            </section>
+
+            <section id="stats-dashboard" class="stats">
+                <h2>📊 Your Productivity Stats</h2>
+                <div class="stat-card">
+                    <p>📝 Tasks Created Today: <span id="created-today">0</span></p>
+                </div>
+                <div class="stat-card">
+                    <p>✅ Tasks Completed Today: <span id="completed-today">0</span></p>
+                </div>
+                <div class="stat-card">
+                    <p>📈 Completion Rate: <span id="completion-rate">0%</span></p>
+                </div>
+                <div class="stat-card">
+                    <p>🔥 Current Streak: <span id="streak-count">0</span> days</p>
+                </div>
+                <div class="stat-card">
+                    <p>📅 Weekly Tasks: <span id="weekly-tasks">0</span></p>
                 </div>
             </section>
         </main>
