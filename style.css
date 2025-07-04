@@ -19,25 +19,12 @@ body {
    LAYOUT
 ======================== */
 .container {
-    display: flex;
-    gap: 2rem;
+    width: 100%;
     margin-top: 1rem;
-    flex-wrap: wrap;
-}
-
-nav, main {
-    background: #ffffff;
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-nav {
-    flex: 1;
 }
 
 main {
-    flex: 3;
+    width: 100%;
     padding: 1.5rem;
 }
 
@@ -56,25 +43,6 @@ header {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* ========================
-   NAVIGATION
-======================== */
-nav ul {
-    list-style: none;
-}
-
-nav li {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-    background: #e0e7ff;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-nav li:hover {
-    background: #c7d2fe;
-}
 
 /* ========================
    QUOTE CARD
@@ -108,6 +76,61 @@ nav li:hover {
 }
 
 /* ========================
+   EISENHOWER MATRIX GRID
+======================== */
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.matrix-quadrant {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 1rem;
+    min-height: 250px;
+    max-height: 400px;
+    overflow-y: auto;
+    transition: box-shadow 0.3s ease;
+    position: relative;
+}
+
+.matrix-quadrant:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+.matrix-quadrant h3 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.matrix-title {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Ensure task list spacing inside matrix */
+.matrix-quadrant .task {
+    margin-bottom: 0.75rem;
+}
+
+/* Scrollbar for quadrants */
+.matrix-quadrant::-webkit-scrollbar {
+    width: 8px;
+}
+
+.matrix-quadrant::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+
+/* ========================
    TASKS & TODO
 ======================== */
 .todo input {
@@ -133,6 +156,11 @@ nav li:hover {
     transform: translateY(10px);
     transition: all 0.3s ease;
     position: relative;
+}
+
+.task-list {
+    list-style: none;
+    padding-left: 0;
 }
 
 .task-controls {
@@ -295,12 +323,16 @@ nav li:hover {
 }
 
 .stats {
-    margin-top: 2rem;
+    margin-top: 3rem;
     background: #f0f4ff;
     padding: 1rem 2rem;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     animation: fadeInUp 0.6s ease-out;
+}
+
+.stats h2 {
+    margin-bottom: 1rem;
 }
 
 .stat-card {
@@ -485,7 +517,12 @@ nav li:hover {
         flex-direction: column;
     }
 
-    nav, main {
+    main {
         width: 100%;
+    }
+
+    .matrix-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
     }
 }
