@@ -151,10 +151,10 @@ header {
     border-radius: 10px;
     text-align: left;
     background: #f9fafb;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #333;
     opacity: 0;
     transform: translateY(10px);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease-in-out;
     position: relative;
 }
 

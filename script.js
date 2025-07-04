@@ -33,7 +33,6 @@ saveTasks();
 
 // Basic To-Do List functionality
 const input = document.getElementById("task-input");
-const taskList = document.getElementById("task-list");
 const filterSelect = document.getElementById("filter-select"); // Optional filter dropdown
 const categorySelect = document.getElementById("category-select");
 
@@ -198,7 +197,8 @@ function formatCategory(value) {
 
 // Function to render tasks
 function renderTasks(filter = "all") {
-    taskList.innerHTML = "";
+    // Clear all quadrant lists
+    document.querySelectorAll(".task-list").forEach(ul => ul.innerHTML = "");
 
         // Ensure tasks are up-to-date
         tasks.forEach((task, index) => {
@@ -239,9 +239,9 @@ function renderTasks(filter = "all") {
         taskText.classList.add("task-text");
         if(task.completed) taskText.classList.add("completed");
 
-        const categoryTag = document.createElement("span");
-        categoryTag.classList.add("category-tag");
-        categoryTag.textContent = formatCategory(task.category);
+        //const categoryTag = document.createElement("span");
+        //categoryTag.classList.add("category-tag");
+        //categoryTag.textContent = formatCategory(task.category);
 
         const taskContent = document.createElement("div");
         taskContent.classList.add("task-content");
@@ -443,10 +443,14 @@ function renderTasks(filter = "all") {
           // Assemble the task item
           taskItem.appendChild(dragHandle);
           taskItem.appendChild(checkbox);
-          taskItem.appendChild(categoryTag);
+         // taskItem.appendChild(categoryTag);
           taskItem.appendChild(taskContent);
           taskItem.appendChild(deleteBtn);
-          taskList.appendChild(taskItem);
+          
+          const targetList = document.getElementById(`${task.category}-list`);
+          if(targetList) {
+            targetList.appendChild(taskItem);
+          }
 
            // Trigger fade-in
        if(!taskItem.classList.contains("show")){
@@ -462,49 +466,62 @@ function renderTasks(filter = "all") {
 
 // Enable SortableJS (for drag and drop feature)
 if(typeof Sortable !== "undefined"){
-    new Sortable(taskList, {
-        animation: 150,
-        handle: ".drag-handle",
-        ghostClass: "placeholder",    // placeholder for where item is dropping
-        chosenClass: "dragging",      // the dragged item
-        onEnd: function(evt){
-            const currentFilter = filterSelect.value;
-    
-            // Drag logic works only for all and active
-            if(currentFilter === "completed"){
-                taskList.classList.add("disable-drag");
-            } 
-        
-            // Build a map of the filtered task indices
-            const filteredIndices = tasks.reduce((acc, task, i) => {
-                if((currentFilter === "all") || (currentFilter === "active" && !task.completed)
-                ){
-                    acc.push(i);
-                } return acc;
-            }, []);
-    
-            // Map DOM positions to actual task array indices
-            const fromIndex = filteredIndices[evt.oldIndex];
-            const toIndex = filteredIndices[evt.newIndex];
-    
-            // Swap tasks in full array
-            if(fromIndex !== undefined && toIndex !== undefined){
-                const [movedTask] = tasks.splice(fromIndex, 1);
-            tasks.splice(toIndex, 0, movedTask);
-            
-            saveTasks();
-            renderTasks(currentFilter);
-    
-         // Animation for dropped item
-         const listItems = taskList.querySelectorAll(".task");
-         const droppedEl = listItems[evt.newIndex];
-         if(droppedEl){
-            droppedEl.classList.add("dropped");
-            setTimeout(() => droppedEl.classList.remove("dropped"), 400);
-         }   
-            }   
+    document.querySelectorAll('.task-list').forEach(list => {
+        new Sortable(list, {
+            group: "tasks",
+            animation: 150,
+            handle: ".drag-handle",
+            ghostClass: "placeholder",    // placeholder for where item is dropping
+            chosenClass: "dragging",      // the dragged item
+            onEnd: function(evt){
+                const currentFilter = filterSelect?.value || "all";
+                if(currentFilter === "completed") return;
+
+                const draggedList = evt.to;
+                const newCategory = draggedList.closest('.matrix-quadrant')?.dataset?.category;
+                const oldCategory = evt.from.closest('.matrix-quadrant')?.dataset?.category;
+
+                if(!newCategory || !oldCategory) return;
+
+                const listItems = draggedList.querySelectorAll(".task");
+                const droppedEl = listItems[evt.newIndex];
+                const draggedText = droppedEl?.querySelector(".task-text")?.textContent?.trim();
+
+                const movedTask = tasks.find(task => task.text === draggedText);
+                if(!movedTask) return;
+
+                // Update category in data
+                movedTask.category = newCategory;
+
+                // Update color class visually
+                droppedEl.classList.remove("urgent-important", "urgent-not-important", "not-urgent-important", "not-urgent-not-important");
+                droppedEl.classList.add(newCategory); // matches CSS class naming
+
+                // Reorder within new category
+                const filteredTasks = tasks.filter(task => task.category === newCategory && (
+                    currentFilter === "all" || (currentFilter === "active" && !task.completed)
+                ));
+
+                const oldIndex = filteredTasks.findIndex(t => t.id === movedTask.id);
+                filteredTasks.splice(oldIndex, 1);
+                filteredTasks.splice(evt.newIndex, 0, movedTask);
+
+                // Update the global tasks list
+                const untouchedTasks = tasks.filter(task => task.category !== newCategory);
+                tasks.length = 0;
+                tasks.push(...untouchedTasks, ...filteredTasks);
+
+                saveTasks();
+                updateStats();
+
+                // Animate drop
+                if(droppedEl) {
+                    droppedEl.classList.add("dropped");
+                    setTimeout(() => droppedEl.classList.remove("dropped"), 400);
+                }
         }
-    });
+    }); 
+});
 } else {
     console.warn("SortableJS not loaded");
 }
