@@ -158,6 +158,41 @@ header {
     position: relative;
 }
 
+.task-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+#task-input, #category-select, #add-task-btn {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+#task-input {
+    flex: 2;
+    min-width: 200px;
+}
+
+#category-select {
+    flex: 1;
+    min-width: 160px;
+}
+
+#add-task-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#add-task-btn:hover {
+    background-color: #388e3c;
+}
+
 .task-list {
     list-style: none;
     padding-left: 0;

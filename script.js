@@ -166,7 +166,28 @@ function createTask(text, category){
     };
 }
 
-input.addEventListener("keydown", function (e){
+const addTaskBtn = document.getElementById("add-task-btn");
+
+addTaskBtn.addEventListener("click", () => {
+    const trimmed = input.value.trim();
+    const category = categorySelect.value;
+
+    if(trimmed.length === 0) return;
+
+    // Add to tasks array
+    tasks.push(createTask(trimmed, category));
+
+    // Save and re-render
+    saveTasks();
+    renderTasks(filterSelect.value);
+    updateStats();
+    updateClearButtonVisibility();
+
+    // Clear input
+    input.value = "";
+});
+
+/* input.addEventListener("keydown", function (e){
     const trimmed = input.value.trim();
     if(e.key === "Enter" && trimmed.length > 0){
         // Add to tasks array
@@ -181,7 +202,7 @@ input.addEventListener("keydown", function (e){
         // Clear input
         input.value = "";
     }
-});
+}); */
 
 // Format Category Function
 function formatCategory(value) {

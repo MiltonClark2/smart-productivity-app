@@ -21,8 +21,18 @@
             </section>
 
             <section class="todo">
-                <input type="text" id="task-input" placeholder="Add a new task..." />
-
+                <div id="task-form" class="task-form">
+                    <input type="text" id="task-input" placeholder="Add a new task..." /> 
+                    <!--Category Selector-->    
+                    <select id="category-select">
+                        <option value="urgent-important">Urgent & Important</option>
+                        <option value="urgent-not-important">Urgent & Not Important</option>
+                        <option value="not-urgent-important">Not Urgent & Important</option>
+                        <option value="not-urgent-not-important">Not Urgent & Not Important</option>
+                    </select>
+                    <button id="add-task-btn">➕ Add Task</button>
+                </div>
+                
                 <div class="task-controls">
                      <!--Filter Dropdown --> 
                 <select id="filter-select">
@@ -30,14 +40,6 @@
                     <option value="active">Active</option>
                     <option value="completed">Completed</option>
                 </select>
-
-                <!--Category Selector-->    
-            <select id="category-select">
-                <option value="urgent-important">Urgent & Important</option>
-                <option value="urgent-not-important">Urgent & Not Important</option>
-                <option value="not-urgent-important">Not Urgent & Important</option>
-                <option value="not-urgent-not-important">Not Urgent & Not Important</option>
-            </select>
 
              <!--Clear Completed Button-->
              <button id="clear-completed-btn" class="clear-btn">
